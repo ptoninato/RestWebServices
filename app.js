@@ -5,7 +5,15 @@ import bookRouterImport from './routes/bookRouter.js';
 import Book from './models/bookModel.js';
 
 const app = express();
-const db = mongoose.connect('mongodb://localhost/bookApi');
+console.log(process.env.ENV);
+if (process.env.ENV === 'Test') {
+  console.log('This is a test');
+  const db = mongoose.connect('mongodb://localhost/bookApi_Test');
+} else {
+  console.log('This is Prod');
+  const db = mongoose.connect('mongodb://localhost/bookApi-prod');
+}
+
 const port = process.env.PORT || 3000;
 const bookRouter = bookRouterImport(Book);
 
@@ -18,6 +26,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to my Nodemon API!');
 });
 
-app.listen(port, () => {
+app.server = app.listen(port, () => {
   console.log(`Running on port ${port}`);
 });
+
+export default app;
