@@ -1,27 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import express from 'express';
+import bookController from '../controllers/booksController.js';
 
 function routes(Book) {
   const bookRouter = express.Router();
+  const controller = bookController(Book);
   bookRouter.route('/books')
-    .post((req, res) => {
-      const book = new Book(req.body);
-      book.save();
-      return res.status(201).json(book);
-    })
-    .get((req, res) => {
-      const query = {};
-      if (req.query.genre) {
-        query.genre = req.query.genre;
-      }
-      Book.find(query, (err, books) => {
-        if (err) {
-          return res.send(err);
-        }
-        return res.json(books);
-      });
-    });
+    .post(controller.post)
+    .get(controller.get);
   bookRouter.use('/books/:bookId', (req, res, next) => {
     Book.findById(req.params.bookId, (err, book) => {
       if (err) {
@@ -72,7 +59,7 @@ function routes(Book) {
         if (err) {
           return res.send(err);
         }
-        return res.sendStatus(204);
+        return res.sendStatus(404);
       });
     });
   return bookRouter;
