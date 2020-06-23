@@ -11,7 +11,7 @@ if (process.env.ENV === 'Test') {
   const db = mongoose.connect('mongodb://localhost/bookApi_Test');
 } else {
   console.log('This is Prod');
-  const db = mongoose.connect('mongodb://localhost/bookApi-prod');
+  const db = mongoose.connect('mongodb://localhost/bookApi');
 }
 
 const port = process.env.PORT || 3000;
